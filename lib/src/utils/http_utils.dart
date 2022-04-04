@@ -1,7 +1,8 @@
-import 'dart:io';
 import 'package:dirai/dirai.dart';
 import 'package:dirai/src/model/utils/http_endpoint.dart';
+import 'package:dirai/src/utils/enum_utils.dart';
 import 'package:http/http.dart' as http;
+import 'package:dirai/src/utils/json_utils.dart';
 
 extension HttpUtils on HttpEndpoint {
   // String get(){
@@ -11,9 +12,8 @@ extension HttpUtils on HttpEndpoint {
 
   //http post in dart
   Future<String?> post(Object? body) async {
-    assert(MiraiBot.instance.address == "localhost:8080");
-    var url = Uri.parse('http://$MiraiBot.instance.address/$this');
-    var response = await http.post(url, body: body);
+    var url = Uri.parse('http://${MiraiBot.instance.address}/${toBriefString()}');
+    var response = await http.post(url, body: body.toJsonString());
 
     return response.body;
   }
