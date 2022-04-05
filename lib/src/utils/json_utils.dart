@@ -10,4 +10,9 @@ extension JsonDeserializeUtils on String {
   Map<String, dynamic> deserialize(){
     return json.decode(this);
   }
+
+  String? fetch(String token){
+    var map = deserialize();
+    return map[token];
+  }
 }

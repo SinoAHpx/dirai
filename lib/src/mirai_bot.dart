@@ -1,5 +1,9 @@
-import 'package:dirai/src/model/utils/http_endpoint.dart';
-import 'package:dirai/src/utils/http_utils.dart';
+import 'package:dirai/src/model/exceptions.dart';
+
+import 'model/utils/http_endpoint.dart';
+import 'utils/http_utils.dart';
+import 'utils/logger.dart';
+import 'utils/json_utils.dart';
 
 
 class MiraiBot {
@@ -15,15 +19,29 @@ class MiraiBot {
   /// 单一实例
   static late MiraiBot instance;
 
+  /// 日志，如果为null则不使用日志
+  static late LoggerBase? Logger;
+
+  late final String sessionKey;
+
   /// 启动bot，注意: 每次启动都会刷新静态的instance单例
-  void launch() {
+  Future<void> launch() async {
     instance = this;
+    sessionKey = await _verify();
+
   }
 
-  /// 验明身份，返回验证密钥
-  Future<String?> verify() async {
+  /// 验明身份，返回session key
+  Future<String> _verify() async {
     var response = await HttpEndpoint.verify.post({"verifyKey": verifyKey});
 
-    return response;
+    Logger?.log("post /verify endpoint, get $response");
+    var sessionKey = response?.fetch("session");
+    if(sessionKey == null) {
+      throw VerifyFailedException("failed to verify with key: \"$verifyKey\", response: $response");
+    }
+    Logger?.log("session key is: $sessionKey");
+
+    return sessionKey;
   }
 }
