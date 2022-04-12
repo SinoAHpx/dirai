@@ -6,10 +6,14 @@ void main() async {
   final bot = MiraiBot()
     ..address = "localhost:8080"
     ..qq = 1590454991
-    ..verifyKey = "11451419198110";
-  MiraiBot.Logger = BasicLogger();
-
+    ..verifyKey = "1145141919810"
+    ..logger = BasicLogger();
+  
   bot.launch();
+  
+  await Future.delayed(Duration(seconds: 5));
+
+  bot.dispose();
 }
 
 class BasicLogger implements LoggerBase {

@@ -10,10 +10,10 @@ extension HttpUtils on HttpEndpoint {
   //   var client = http.get(url);
   // }
 
-  //http post in dart
+  //http post in dart, warning: body won't be serialized to json
   Future<String?> post(Object? body) async {
     var url = Uri.parse('http://${MiraiBot.instance.address}/${toBriefString()}');
-    var response = await http.post(url, body: body.toJsonString());
+    var response = await http.post(url, body: body);
 
     return response.body;
   }
