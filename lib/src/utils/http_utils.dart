@@ -1,4 +1,5 @@
 import 'package:dirai/dirai.dart';
+import 'package:dirai/src/model/exceptions.dart';
 import 'package:dirai/src/model/utils/http_endpoint.dart';
 import 'package:dirai/src/utils/enum_utils.dart';
 import 'package:http/http.dart' as http;
@@ -16,5 +17,17 @@ extension HttpUtils on HttpEndpoint {
     var response = await http.post(url, body: body);
 
     return response.body;
+  }
+
+  /// If there's no "code" entity in the json, assuming it was successful request
+  void ensure(String responseJson, {String additionalMsg = ""}) {
+    var code = responseJson.fetch<int>("code");
+    if(code != null && code != 0){
+      var msg = ": ${responseJson.fetch("msg")}" ?? "";
+      if(additionalMsg.isNotEmpty) {
+        additionalMsg = ", $additionalMsg";
+      }
+      throw InvalidResponseException("Failed to request endpoint \"${toBriefString()}\"$msg$additionalMsg");
+    }
   }
 }

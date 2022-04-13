@@ -51,12 +51,18 @@ class MiraiBot {
   Future<void> _verify() async {
     var payload = {"verifyKey": verifyKey}.toJsonString();
     var response = await HttpEndpoint.verify.post(payload);
-
     logger?.log("post /verify endpoint with payload $payload, get $response");
-    var sessionKey = response?.fetch("session");
+
+    if(response == null) {
+      throw InvalidResponseException("For some magic reasons, request was failed");
+    }
+    HttpEndpoint.verify.ensure(response, additionalMsg: "body: $payload");
+
+    var sessionKey = response.fetch<String>("session");
     if(sessionKey == null) {
       throw VerifyFailedException("failed to verify with key: \"$verifyKey\", response: $response");
     }
+
     logger?.log("session key is: $sessionKey");
 
     this.sessionKey = sessionKey;
@@ -66,12 +72,23 @@ class MiraiBot {
     var payload = {"sessionKey": sessionKey, "qq": qq}.toJsonString();
     var response = await HttpEndpoint.bind.post(payload);
     logger?.log("post /bind endpoint with payload $payload, get $response");
-    //todo: ensure success extension for response
+
+    if(response == null) {
+      throw InvalidResponseException("For some magic reasons, request was failed");
+    }
+
+    HttpEndpoint.bind.ensure(response, additionalMsg: "body: $payload");
   }
 
   Future<void> _release() async {
     var payload = {"sessionKey": sessionKey, "qq": qq}.toJsonString();
     var response = await HttpEndpoint.release.post(payload);
     logger?.log("post /release endpoint with payload $payload, get $response");
+
+    if(response == null) {
+      throw InvalidResponseException("For some magic reasons, request was failed");
+    }
+
+    HttpEndpoint.release.ensure(response, additionalMsg: "body: $payload");
   }
 }

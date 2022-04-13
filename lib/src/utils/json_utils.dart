@@ -11,8 +11,8 @@ extension JsonDeserializeUtils on String {
     return json.decode(this);
   }
 
-  String? fetch(String token){
+  T? fetch<T>(String token) {
     var map = deserialize();
-    return map[token];
+    return map[token] as T;
   }
 }
