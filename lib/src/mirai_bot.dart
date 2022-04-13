@@ -1,6 +1,9 @@
 import 'dart:ffi';
+import 'dart:math';
 
 import 'package:dirai/src/model/exceptions.dart';
+import 'package:web_socket_channel/io.dart';
+import 'package:web_socket_channel/status.dart' as status;
 
 import 'model/utils/http_endpoint.dart';
 import 'utils/http_utils.dart';
@@ -31,20 +34,37 @@ class MiraiBot {
     logger?.log("launching bot...");
 
     instance = this;
-
+    logger?.log("trying to initialize http adapter");
     await _verify();
     await _bind();
+    logger?.log("successfully initialized http adapter");
+
+    logger?.log("trying to connect to websocket adapter");
+    _connect();
+    logger?.log("successfully initialized websocket adapter");
 
     logger?.log("launch successfully");
   }
 
+
   Future<void> dispose() async {
-    if(sessionKey.isEmpty)
+    if(sessionKey.isEmpty) {
       return;
+    }
 
     await _release();
+    _channel.sink.close();
 
     logger?.log("life circle terminated");
+  }
+
+  late IOWebSocketChannel _channel;
+
+  Future<void> _connect() async {
+    _channel = IOWebSocketChannel.connect(Uri.parse("ws://${address}/all?verifyKey=$verifyKey&qq=$qq"));
+    _channel.stream.listen((message) {
+      logger?.log("receiving websocket data: $message");
+    });
   }
 
   /// 验明身份，返回session key
