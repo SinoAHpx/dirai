@@ -60,6 +60,7 @@ class MiraiBot {
 
   late IOWebSocketChannel _channel;
 
+  /// connect to websocket adapter
   Future<void> _connect() async {
     _channel = IOWebSocketChannel.connect(Uri.parse("ws://${address}/all?verifyKey=$verifyKey&qq=$qq"));
     _channel.stream.listen((message) {
@@ -67,7 +68,7 @@ class MiraiBot {
     });
   }
 
-  /// 验明身份，返回session key
+  /// verify session by specified verify key, set session key here
   Future<void> _verify() async {
     var payload = {"verifyKey": verifyKey}.toJsonString();
     var response = await HttpEndpoint.verify.post(payload);
