@@ -1,6 +1,9 @@
+import 'dart:io';
+
 import 'package:dirai/dirai.dart';
 import 'package:dirai/src/utils/logger.dart';
 import 'package:intl/intl.dart';
+import 'package:web_socket_channel/io.dart';
 
 void main() async {
   final bot = MiraiBot()
@@ -8,10 +11,16 @@ void main() async {
     ..qq = 1590454991
     ..verifyKey = "1145141919810"
     ..logger = BasicLogger();
-  
-  bot.launch();
-  
-  print("this is a postfix");
+
+  await bot.launch();
+
+  bot.updateStream.where((event) => event.toString().contains("GroupMessage")).listen((event) {
+    print("receiving group message");
+  });
+
+  bot.updateStream.where((event) => event.toString().contains("FriendMessage")).listen((event) {
+    print("received friend message");
+  });
 }
 
 class BasicLogger implements LoggerBase {
@@ -22,7 +31,6 @@ class BasicLogger implements LoggerBase {
 
   @override
   void error(String message, {Exception? exception}) {
-    var exceptionMsg = exception.toString();
     // shut up dart
     // ignore: dead_null_aware_expression
     print("${getPrefix("ERROR")}$message${exception.toString() ?? ""}");
