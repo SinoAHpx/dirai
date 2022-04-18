@@ -1,5 +1,3 @@
-import 'dart:html';
-
 import 'package:dirai/src/model/data/shared.dart';
 import 'package:dirai/src/utils/enum_utils.dart';
 
@@ -53,7 +51,7 @@ abstract class EventBase {
   EventType get type;
 }
 
-class BotOnlineEvent extends EventBase  with BotEvent {
+class BotOnlineEvent extends EventBase  with BotEventMixin {
   @override
   EventType get type => EventType.BotOnlineEvent;
 
@@ -66,7 +64,7 @@ class BotOnlineEvent extends EventBase  with BotEvent {
   }
 }
 
-class BotOfflineEventActive extends EventBase with BotEvent {
+class BotOfflineEventActive extends EventBase with BotEventMixin {
   @override
   EventType get type => EventType.BotOfflineEventActive;
 
@@ -79,7 +77,7 @@ class BotOfflineEventActive extends EventBase with BotEvent {
   }
 }
 
-class BotOfflineEventForce extends EventBase  with BotEvent {
+class BotOfflineEventForce extends EventBase  with BotEventMixin {
   @override
   EventType get type => EventType.BotOfflineEventForce;
 
@@ -92,7 +90,7 @@ class BotOfflineEventForce extends EventBase  with BotEvent {
   }
 }
 
-class BotOfflineEventDropped extends EventBase  with BotEvent {
+class BotOfflineEventDropped extends EventBase  with BotEventMixin {
   @override
   EventType get type => EventType.BotOfflineEventDropped;
 
@@ -105,7 +103,7 @@ class BotOfflineEventDropped extends EventBase  with BotEvent {
   }
 }
 
-class BotReloginEvent extends EventBase with BotEvent {
+class BotReloginEvent extends EventBase with BotEventMixin {
   @override
   EventType get type => EventType.BotReloginEvent;
 
@@ -118,11 +116,9 @@ class BotReloginEvent extends EventBase with BotEvent {
   }
 }
 
-class FriendInputStatusChangedEvent extends EventBase {
+class FriendInputStatusChangedEvent extends EventBase with FriendEventMixin {
   @override
   EventType get type => EventType.FriendInputStatusChangedEvent;
-
-  late Friend friend;
 
   late bool inputting;
 
@@ -135,11 +131,9 @@ class FriendInputStatusChangedEvent extends EventBase {
   }
 }
 
-class FriendNickChangedEvent extends EventBase {
+class FriendNickChangedEvent extends EventBase with FriendEventMixin {
   @override
   EventType get type => EventType.FriendNickChangedEvent;
-
-  late Friend friend;
 
   late String from;
 
@@ -155,15 +149,9 @@ class FriendNickChangedEvent extends EventBase {
   }
 }
 
-class FriendRecallEvent extends EventBase {
+class FriendRecallEvent extends EventBase with RecallEventMixin {
   @override
   EventType get type => EventType.FriendRecallEvent;
-
-  late int authorId;
-
-  late int messageId;
-
-  late int time;
 
   late int operator;
 
@@ -179,7 +167,7 @@ class FriendRecallEvent extends EventBase {
 }
 
 class BotGroupPermissionChangeEvent extends EventBase
-    with GroupStatusChangeEvent<Permission> {
+    with GroupStatusChangeEventMixin<Permission> {
   @override
   EventType get type => EventType.BotGroupPermissionChangeEvent;
 
@@ -193,70 +181,48 @@ class BotGroupPermissionChangeEvent extends EventBase
   }
 }
 
-abstract class GroupStatusChangeEvent<T> {
-  late T origin;
-
-  late T current;
-
-  late Group group;
-
-  late Operator operator;
-}
-
-class BotMuteEvent extends EventBase {
+class BotMuteEvent extends EventBase with MuteEventMixin {
   @override
   EventType get type => EventType.BotMuteEvent;
-
-  late int durationSeconds;
-
-  late Operator operator;
 
   Map<String, dynamic> toJson() {
     return {
       'type': type.toBriefString(),
       'durationSeconds': durationSeconds,
-      'operator': operator.toJson(),
+      'operator': operator?.toJson(),
     };
   }
 }
 
-class BotUnmuteEvent extends EventBase {
+class BotUnmuteEvent extends EventBase with MuteEventMixin {
   @override
   EventType get type => EventType.BotUnmuteEvent;
 
-  late Operator operator;
-
   Map<String, dynamic> toJson() {
     return {
       'type': type.toBriefString(),
-      'operator': operator.toJson(),
+      'operator': operator?.toJson(),
     };
   }
 }
 
-class BotJoinGroupEvent extends EventBase {
+class BotJoinGroupEvent extends EventBase with JoinEventMixin {
   @override
   EventType get type => EventType.BotJoinGroupEvent;
 
-  late Group group;
-
-  late Member invitor;
-
   Map<String, dynamic> toJson() {
     return {
       'type': type.toBriefString(),
       'group': group.toJson(),
-      'invitor': invitor.toJson(),
+      'invitor': invitor?.toJson(),
     };
   }
 }
 
-class BotLeaveEventActive extends EventBase {
+class BotLeaveEventActive extends EventBase with LeaveEventMixin {
   @override
   EventType get type => EventType.BotLeaveEventActive;
 
-  late Group group;
-
   Map<String, dynamic> toJson() {
     return {
       'type': type.toBriefString(),
@@ -265,34 +231,24 @@ class BotLeaveEventActive extends EventBase {
   }
 }
 
-class BotLeaveEventKick extends EventBase {
+class BotLeaveEventKick extends EventBase with LeaveEventMixin {
   @override
   EventType get type => EventType.BotLeaveEventKick;
 
-  late Group group;
-
-  late Member operator;
-
   Map<String, dynamic> toJson() {
     return {
       'type': type.toBriefString(),
       'group': group.toJson(),
-      'operator': operator.toJson(),
+      'operator': operator?.toJson(),
     };
   }
 }
 
-class GroupRecallEvent extends EventBase {
+class GroupRecallEvent extends EventBase with RecallEventMixin {
   @override
   EventType get type => EventType.GroupRecallEvent;
 
   late Group group;
-
-  late int authorId;
-
-  late int messageId;
-
-  late int time;
 
   late Operator operator;
 
@@ -348,7 +304,7 @@ class NudgeSubject {
 }
 
 class GroupNameChangeEvent extends EventBase
-    with GroupStatusChangeEvent<String> {
+    with GroupStatusChangeEventMixin<String> {
   @override
   EventType get type => EventType.GroupNameChangeEvent;
 
@@ -364,7 +320,7 @@ class GroupNameChangeEvent extends EventBase
 }
 
 class GroupEntranceAnnouncementChangeEvent extends EventBase
-    with GroupStatusChangeEvent<String> {
+    with GroupStatusChangeEventMixin<String> {
   @override
   EventType get type => EventType.GroupEntranceAnnouncementChangeEvent;
 
@@ -379,7 +335,7 @@ class GroupEntranceAnnouncementChangeEvent extends EventBase
   }
 }
 
-class GroupMuteAllEvent extends EventBase with GroupStatusChangeEvent<bool> {
+class GroupMuteAllEvent extends EventBase with GroupStatusChangeEventMixin<bool> {
   @override
   EventType get type => EventType.GroupMuteAllEvent;
 
@@ -395,7 +351,7 @@ class GroupMuteAllEvent extends EventBase with GroupStatusChangeEvent<bool> {
 }
 
 class GroupAllowAnonymousChatEvent extends EventBase
-    with GroupStatusChangeEvent<bool> {
+    with GroupStatusChangeEventMixin<bool> {
   @override
   EventType get type => EventType.GroupAllowAnonymousChatEvent;
 
@@ -411,7 +367,7 @@ class GroupAllowAnonymousChatEvent extends EventBase
 }
 
 class GroupAllowConfessTalkEvent extends EventBase
-    with GroupStatusChangeEvent<bool> {
+    with GroupStatusChangeEventMixin<bool> {
   @override
   EventType get type => EventType.GroupAllowConfessTalkEvent;
 
@@ -429,7 +385,7 @@ class GroupAllowConfessTalkEvent extends EventBase
 }
 
 class GroupAllowMemberInviteEvent extends EventBase
-    with GroupStatusChangeEvent<bool> {
+    with GroupStatusChangeEventMixin<bool> {
   @override
   EventType get type => EventType.GroupAllowMemberInviteEvent;
 
@@ -444,59 +400,35 @@ class GroupAllowMemberInviteEvent extends EventBase
   }
 }
 
-class MemberJoinEvent extends EventBase {
+class MemberJoinEvent extends EventBase with JoinEventMixin {
   @override
   EventType get type => EventType.MemberJoinEvent;
 
-  late Member member;
-
-  late Member? invitor;
-
   Map<String, dynamic> toJson() {
-    if (invitor == null) {
-      return {
-        'type': type.toBriefString(),
-        'member': member.toJson(),
-      };
-    } else {
-      return {
-        'type': type.toBriefString(),
-        'member': member.toJson(),
-        'invitor': invitor!.toJson(),
-      };
-    }
+    return {
+      'type': type.toBriefString(),
+      'member': member.toJson(),
+      'invitor': invitor?.toJson(),
+    };
   }
 }
 
-class MemberLeaveEventKick extends EventBase {
+class MemberLeaveEventKick extends EventBase with LeaveEventMixin {
   @override
   EventType get type => EventType.MemberLeaveEventKick;
 
-  late Member member;
-
-  late Operator? operator;
-
   Map<String, dynamic> toJson() {
-    if (operator == null) {
-      return {
-        'type': type.toBriefString(),
-        'member': member.toJson(),
-      };
-    } else {
-      return {
-        'type': type.toBriefString(),
-        'member': member.toJson(),
-        'kicker': operator!.toJson(),
-      };
-    }
+    return {
+      'type': type.toBriefString(),
+      'member': member.toJson(),
+      'kicker': operator?.toJson(),
+    };
   }
 }
 
-class MemberLeaveEventQuit extends EventBase {
+class MemberLeaveEventQuit extends EventBase with LeaveEventMixin {
   @override
   EventType get type => EventType.MemberLeaveEventQuit;
-
-  late Member member;
 
   Map<String, dynamic> toJson() {
     return {
@@ -507,11 +439,9 @@ class MemberLeaveEventQuit extends EventBase {
 }
 
 class MemberCardChangeEvent extends EventBase
-    with GroupStatusChangeEvent<String> {
+    with GroupStatusChangeEventMixin<String> {
   @override
   EventType get type => EventType.MemberCardChangeEvent;
-
-  late Member member;
 
   Map<String, dynamic> toJson() {
     return {
@@ -524,11 +454,9 @@ class MemberCardChangeEvent extends EventBase
 }
 
 class MemberSpecialTitleChangeEvent extends EventBase
-    with GroupStatusChangeEvent<String> {
+    with GroupStatusChangeEventMixin<String> {
   @override
   EventType get type => EventType.MemberSpecialTitleChangeEvent;
-
-  late Member member;
 
   Map<String, dynamic> toJson() {
     return {
@@ -541,11 +469,9 @@ class MemberSpecialTitleChangeEvent extends EventBase
 }
 
 class MemberPermissionChangeEvent extends EventBase
-    with GroupStatusChangeEvent<Permission> {
+    with GroupStatusChangeEventMixin<Permission> {
   @override
   EventType get type => EventType.MemberPermissionChangeEvent;
-
-  late Member member;
 
   Map<String, dynamic> toJson() {
     return {
@@ -557,15 +483,9 @@ class MemberPermissionChangeEvent extends EventBase
   }
 }
 
-class MemberMuteEvent extends EventBase {
+class MemberMuteEvent extends EventBase with MuteEventMixin {
   @override
   EventType get type => EventType.MemberMuteEvent;
-
-  late Member member;
-
-  late Operator? operator;
-
-  late int durationTime;
 
   Map<String, dynamic> toJson() {
     return {
@@ -577,13 +497,9 @@ class MemberMuteEvent extends EventBase {
   }
 }
 
-class MemberUnmuteEvent extends EventBase {
+class MemberUnmuteEvent extends EventBase with MuteEventMixin {
   @override
   EventType get type => EventType.MemberUnmuteEvent;
-
-  late Member member;
-
-  late Operator? operator;
 
   Map<String, dynamic> toJson() {
     return {
@@ -614,20 +530,10 @@ class MemberHonorChangeEvent extends EventBase {
   }
 }
 
-class NewFriendRequestEvent extends EventBase {
+class NewFriendRequestEvent extends EventBase with RequestEventMixin {
   @override
   EventType get type => EventType.NewFriendRequestEvent;
 
-  late int eventId;
-
-  late int fromId;
-
-  late int groupId;
-
-  late String nick;
-
-  late String message;
-
   Map<String, dynamic> toJson() {
     return {
       'type': type.toBriefString(),
@@ -640,20 +546,10 @@ class NewFriendRequestEvent extends EventBase {
   }
 }
 
-class MemberJoinRequestEvent extends EventBase {
+class MemberJoinRequestEvent extends EventBase with RequestEventMixin {
   @override
   EventType get type => EventType.MemberJoinRequestEvent;
 
-  late int eventId;
-
-  late int fromId;
-
-  late int groupId;
-
-  late String nick;
-
-  late String message;
-
   Map<String, dynamic> toJson() {
     return {
       'type': type.toBriefString(),
@@ -666,20 +562,10 @@ class MemberJoinRequestEvent extends EventBase {
   }
 }
 
-class BotInvitedJoinGroupRequestEvent extends EventBase {
+class BotInvitedJoinGroupRequestEvent extends EventBase with RequestEventMixin {
   @override
   EventType get type => EventType.BotInvitedJoinGroupRequestEvent;
 
-  late int eventId;
-
-  late int fromId;
-
-  late int groupId;
-
-  late String nick;
-
-  late String message;
-
   Map<String, dynamic> toJson() {
     return {
       'type': type.toBriefString(),
@@ -692,13 +578,9 @@ class BotInvitedJoinGroupRequestEvent extends EventBase {
   }
 }
 
-class OtherClientOnlineEvent extends EventBase {
+class OtherClientOnlineEvent extends EventBase with OtherClientEventMixin {
   @override
   EventType get type => EventType.OtherClientOnlineEvent;
-
-  late OtherClient client;
-
-  late int kind;
 
   Map<String, dynamic> toJson() {
     return {
@@ -709,11 +591,10 @@ class OtherClientOnlineEvent extends EventBase {
   }
 }
 
-class OtherClientOfflineEvent extends EventBase {
+
+class OtherClientOfflineEvent extends EventBase with OtherClientEventMixin {
   @override
   EventType get type => EventType.OtherClientOfflineEvent;
-
-  late OtherClient client;
 
   Map<String, dynamic> toJson() {
     return {
