@@ -3,6 +3,8 @@
 
 import 'package:dirai/src/utils/enum_utils.dart';
 
+import '../exceptions.dart';
+
 /// 消息类型
 enum MessageType {
   Source,
@@ -27,10 +29,10 @@ enum MessageType {
 }
 
 /// 消息基类
-abstract class MessageBase{
-    MessageType get type;
+abstract class MessageBase {
+  MessageType get type;
 
-    Map<String, dynamic> toJson();
+  Map<String, dynamic> toJson();
 }
 
 /// 源消息
@@ -43,11 +45,10 @@ class SourceMessage extends MessageBase {
   late int time;
 
   @override
-  Map<String, dynamic> toJson() => {
-    'type': type.toBriefString(),
-    'id': id,
-    'time': time
-  };
+  Map<String, dynamic> toJson() =>
+      {'type': type.toBriefString(), 'id': id, 'time': time};
+
+  SourceMessage(int id, int time);
 }
 
 /// 回复消息
@@ -65,19 +66,19 @@ class QuoteMessage extends MessageBase {
 
   List<MessageBase> origin;
 
-
-  QuoteMessage(
-      this.id, this.groupId, this.senderId, this.targetId, this.origin);
+  QuoteMessage(this.id, this.groupId, this.senderId, this.targetId,
+      this.origin);
 
   @override
-  Map<String, dynamic> toJson() => {
-    'type': type.toBriefString(),
-    'id': id,
-    'groupId': groupId,
-    'senderId': senderId,
-    'targetId': targetId,
-    'origin': origin.map((e) => e.toJson()).toList()
-  };
+  Map<String, dynamic> toJson() =>
+      {
+        'type': type.toBriefString(),
+        'id': id,
+        'groupId': groupId,
+        'senderId': senderId,
+        'targetId': targetId,
+        'origin': origin.map((e) => e.toJson()).toList()
+      };
 }
 
 /// @某人消息
@@ -90,11 +91,8 @@ class AtMessage extends MessageBase {
   String get _display => "";
 
   @override
-  Map<String, dynamic> toJson() => {
-    'type': type.toBriefString(),
-    'target': target,
-    'display': _display
-  };
+  Map<String, dynamic> toJson() =>
+      {'type': type.toBriefString(), 'target': target, 'display': _display};
 
   AtMessage(this.target);
 }
@@ -105,9 +103,7 @@ class AtAllMessage extends MessageBase {
   MessageType get type => MessageType.AtAll;
 
   @override
-  Map<String, dynamic> toJson() => {
-    'type': type.toBriefString()
-  };
+  Map<String, dynamic> toJson() => {'type': type.toBriefString()};
 }
 
 class FaceMessage extends MessageBase {
@@ -118,15 +114,9 @@ class FaceMessage extends MessageBase {
   @override
   Map<String, dynamic> toJson() {
     if (faceId == null) {
-      return {
-        'type': type.toBriefString(),
-        'name': name
-      };
+      return {'type': type.toBriefString(), 'name': name};
     } else {
-      return {
-        'type': type.toBriefString(),
-        'faceId': faceId
-      };
+      return {'type': type.toBriefString(), 'faceId': faceId};
     }
   }
 
@@ -141,10 +131,7 @@ class FaceMessage extends MessageBase {
 class PlainMessage extends MessageBase {
   @override
   Map<String, dynamic> toJson() {
-    return {
-      'type': type.toBriefString(),
-      'text': text
-    };
+    return {'type': type.toBriefString(), 'text': text};
   }
 
   @override
@@ -158,26 +145,14 @@ class PlainMessage extends MessageBase {
 class ImageMessage extends MessageBase {
   @override
   Map<String, dynamic> toJson() {
-    if(imageId != null) {
-      return {
-        'type': type.toBriefString(),
-        'imageId': imageId
-      };
-    } else if(url != null) {
-      return {
-        'type': type.toBriefString(),
-        'url': url
-      };
+    if (imageId != null) {
+      return {'type': type.toBriefString(), 'imageId': imageId};
+    } else if (url != null) {
+      return {'type': type.toBriefString(), 'url': url};
     } else if (path != null) {
-      return {
-        'type': type.toBriefString(),
-        'path': path
-      };
+      return {'type': type.toBriefString(), 'path': path};
     } else {
-      return {
-        'type': type.toBriefString(),
-        'base64': base64
-      };
+      return {'type': type.toBriefString(), 'base64': base64};
     }
   }
 
@@ -204,26 +179,14 @@ class ImageMessage extends MessageBase {
 class FlashImageMessage extends MessageBase {
   @override
   Map<String, dynamic> toJson() {
-    if(imageId != null) {
-      return {
-        'type': type.toBriefString(),
-        'imageId': imageId
-      };
-    } else if(url != null) {
-      return {
-        'type': type.toBriefString(),
-        'url': url
-      };
+    if (imageId != null) {
+      return {'type': type.toBriefString(), 'imageId': imageId};
+    } else if (url != null) {
+      return {'type': type.toBriefString(), 'url': url};
     } else if (path != null) {
-      return {
-        'type': type.toBriefString(),
-        'path': path
-      };
+      return {'type': type.toBriefString(), 'path': path};
     } else {
-      return {
-        'type': type.toBriefString(),
-        'base64': base64
-      };
+      return {'type': type.toBriefString(), 'base64': base64};
     }
   }
 
@@ -250,26 +213,14 @@ class FlashImageMessage extends MessageBase {
 class VoiceMessage extends MessageBase {
   @override
   Map<String, dynamic> toJson() {
-    if(voiceId != null) {
-      return {
-        'type': type.toBriefString(),
-        'voiceId': voiceId
-      };
-    } else if(url != null) {
-      return {
-        'type': type.toBriefString(),
-        'url': url
-      };
+    if (voiceId != null) {
+      return {'type': type.toBriefString(), 'voiceId': voiceId};
+    } else if (url != null) {
+      return {'type': type.toBriefString(), 'url': url};
     } else if (path != null) {
-      return {
-        'type': type.toBriefString(),
-        'path': path
-      };
+      return {'type': type.toBriefString(), 'path': path};
     } else {
-      return {
-        'type': type.toBriefString(),
-        'base64': base64
-      };
+      return {'type': type.toBriefString(), 'base64': base64};
     }
   }
 
@@ -299,10 +250,7 @@ class VoiceMessage extends MessageBase {
 class XmlMessage extends MessageBase {
   @override
   Map<String, dynamic> toJson() {
-    return {
-      'type': type.toBriefString(),
-      'xml': xml
-    };
+    return {'type': type.toBriefString(), 'xml': xml};
   }
 
   @override
@@ -316,10 +264,7 @@ class XmlMessage extends MessageBase {
 class JsonMessage extends MessageBase {
   @override
   Map<String, dynamic> toJson() {
-    return {
-      'type': type.toBriefString(),
-      'json': json
-    };
+    return {'type': type.toBriefString(), 'json': json};
   }
 
   @override
@@ -333,10 +278,7 @@ class JsonMessage extends MessageBase {
 class AppMessage extends MessageBase {
   @override
   Map<String, dynamic> toJson() {
-    return {
-      'type': type.toBriefString(),
-      'app': app
-    };
+    return {'type': type.toBriefString(), 'app': app};
   }
 
   @override
@@ -350,10 +292,7 @@ class AppMessage extends MessageBase {
 class PokeMessage extends MessageBase {
   @override
   Map<String, dynamic> toJson() {
-    return {
-      'type': type.toBriefString(),
-      'name': name
-    };
+    return {'type': type.toBriefString(), 'name': name};
   }
 
   @override
@@ -367,16 +306,13 @@ class PokeMessage extends MessageBase {
 class DiceMessage extends MessageBase {
   @override
   Map<String, dynamic> toJson() {
-    return {
-      'type': type.toBriefString(),
-      'value': value
-    };
+    return {'type': type.toBriefString(), 'value': value};
   }
 
   @override
   MessageType get type => MessageType.Dice;
 
-  String value;
+  int value;
 
   DiceMessage(this.value);
 }
@@ -384,11 +320,7 @@ class DiceMessage extends MessageBase {
 class MarketFaceMessage extends MessageBase {
   @override
   Map<String, dynamic> toJson() {
-    return {
-      'type': type.toBriefString(),
-      'name': face,
-      'id': id
-    };
+    return {'type': type.toBriefString(), 'name': face, 'id': id};
   }
 
   @override
@@ -397,9 +329,11 @@ class MarketFaceMessage extends MessageBase {
   late String face;
 
   late int id;
+
+  MarketFaceMessage(this.face, this.id);
 }
 
-class MusicShareMessage extends MessageBase{
+class MusicShareMessage extends MessageBase {
   @override
   MessageType get type => MessageType.MusicShare;
 
@@ -430,6 +364,9 @@ class MusicShareMessage extends MessageBase{
       'brief': brief
     };
   }
+
+  MusicShareMessage(this.kind, this.title, this.summary, this.jumpUrl,
+      this.pictureUrl, this.musicUrl, this.brief);
 }
 
 class ForwardMessage extends MessageBase {
@@ -440,11 +377,10 @@ class ForwardMessage extends MessageBase {
 
   @override
   Map<String, dynamic> toJson() {
-    return {
-      'type': type.toBriefString(),
-      'nodeList': nodeList
-    };
+    return {'type': type.toBriefString(), 'nodeList': nodeList};
   }
+
+  ForwardMessage(this.nodeList);
 }
 
 class ForwardMessageNode {
@@ -467,6 +403,9 @@ class ForwardMessageNode {
       'messageId': messageId
     };
   }
+
+  ForwardMessageNode(this.senderId, this.time, this.senderName,
+      this.messageChain, this.messageId);
 }
 
 class FileMessage extends MessageBase {
@@ -481,13 +420,10 @@ class FileMessage extends MessageBase {
 
   @override
   Map<String, dynamic> toJson() {
-    return {
-      'type': type.toBriefString(),
-      'id': id,
-      'name': name,
-      'size': size
-    };
+    return {'type': type.toBriefString(), 'id': id, 'name': name, 'size': size};
   }
+
+  FileMessage(this.id, this.name, this.size);
 }
 
 class MiraiCode extends MessageBase {
@@ -500,9 +436,6 @@ class MiraiCode extends MessageBase {
 
   @override
   Map<String, dynamic> toJson() {
-    return {
-      'type': type.toBriefString(),
-      'code': code
-    };
+    return {'type': type.toBriefString(), 'code': code};
   }
 }
