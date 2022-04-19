@@ -73,6 +73,11 @@ class OtherClient {
   late int id;
 
   late String platform;
+
+  Map<String, dynamic> toJson() => {
+    'id': id,
+    'platform': platform,
+  };
 }
 
 enum Permission {
