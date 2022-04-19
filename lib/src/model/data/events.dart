@@ -46,7 +46,7 @@ enum EventType {
 }
 
 abstract class EventBase {
-  // Map<String, dynamic> toJson();
+  Map<String, dynamic> toJson();
 
   EventType get type;
 }
@@ -55,7 +55,7 @@ class BotOnlineEvent extends EventBase  with BotEventMixin {
   @override
   EventType get type => EventType.BotOnlineEvent;
 
-  // @override
+  @override
   Map<String, dynamic> toJson() {
     return {
       'type': type.toBriefString(),
@@ -68,7 +68,7 @@ class BotOfflineEventActive extends EventBase with BotEventMixin {
   @override
   EventType get type => EventType.BotOfflineEventActive;
 
-  // @override
+  @override
   Map<String, dynamic> toJson() {
     return {
       'type': type.toBriefString(),
@@ -81,7 +81,7 @@ class BotOfflineEventForce extends EventBase  with BotEventMixin {
   @override
   EventType get type => EventType.BotOfflineEventForce;
 
-  // @override
+  @override
   Map<String, dynamic> toJson() {
     return {
       'type': type.toBriefString(),
@@ -94,7 +94,7 @@ class BotOfflineEventDropped extends EventBase  with BotEventMixin {
   @override
   EventType get type => EventType.BotOfflineEventDropped;
 
-  // @override
+  @override
   Map<String, dynamic> toJson() {
     return {
       'type': type.toBriefString(),
@@ -107,7 +107,7 @@ class BotReloginEvent extends EventBase with BotEventMixin {
   @override
   EventType get type => EventType.BotReloginEvent;
 
-  // @override
+  @override
   Map<String, dynamic> toJson() {
     return {
       'type': type.toBriefString(),
@@ -122,6 +122,7 @@ class FriendInputStatusChangedEvent extends EventBase with FriendEventMixin {
 
   late bool inputting;
 
+  @override
   Map<String, dynamic> toJson() {
     return {
       'type': type.toBriefString(),
@@ -139,6 +140,7 @@ class FriendNickChangedEvent extends EventBase with FriendEventMixin {
 
   late String to;
 
+  @override
   Map<String, dynamic> toJson() {
     return {
       'type': type.toBriefString(),
@@ -155,6 +157,7 @@ class FriendRecallEvent extends EventBase with RecallEventMixin {
 
   late int operator;
 
+  @override
   Map<String, dynamic> toJson() {
     return {
       'type': type.toBriefString(),
@@ -171,6 +174,7 @@ class BotGroupPermissionChangeEvent extends EventBase
   @override
   EventType get type => EventType.BotGroupPermissionChangeEvent;
 
+  @override
   Map<String, dynamic> toJson() {
     return {
       'type': type.toBriefString(),
@@ -185,6 +189,7 @@ class BotMuteEvent extends EventBase with MuteEventMixin {
   @override
   EventType get type => EventType.BotMuteEvent;
 
+  @override
   Map<String, dynamic> toJson() {
     return {
       'type': type.toBriefString(),
@@ -198,6 +203,7 @@ class BotUnmuteEvent extends EventBase with MuteEventMixin {
   @override
   EventType get type => EventType.BotUnmuteEvent;
 
+  @override
   Map<String, dynamic> toJson() {
     return {
       'type': type.toBriefString(),
@@ -210,6 +216,7 @@ class BotJoinGroupEvent extends EventBase with JoinEventMixin {
   @override
   EventType get type => EventType.BotJoinGroupEvent;
 
+  @override
   Map<String, dynamic> toJson() {
     return {
       'type': type.toBriefString(),
@@ -223,6 +230,7 @@ class BotLeaveEventActive extends EventBase with LeaveEventMixin {
   @override
   EventType get type => EventType.BotLeaveEventActive;
 
+  @override
   Map<String, dynamic> toJson() {
     return {
       'type': type.toBriefString(),
@@ -235,6 +243,7 @@ class BotLeaveEventKick extends EventBase with LeaveEventMixin {
   @override
   EventType get type => EventType.BotLeaveEventKick;
 
+  @override
   Map<String, dynamic> toJson() {
     return {
       'type': type.toBriefString(),
@@ -252,6 +261,7 @@ class GroupRecallEvent extends EventBase with RecallEventMixin {
 
   late Operator operator;
 
+  @override
   Map<String, dynamic> toJson() {
     return {
       'type': type.toBriefString(),
@@ -278,6 +288,7 @@ class NudgeEvent extends EventBase {
 
   late int target;
 
+  @override
   Map<String, dynamic> toJson() {
     return {
       'type': type.toBriefString(),
@@ -308,6 +319,7 @@ class GroupNameChangeEvent extends EventBase
   @override
   EventType get type => EventType.GroupNameChangeEvent;
 
+  @override
   Map<String, dynamic> toJson() {
     return {
       'type': type.toBriefString(),
@@ -324,6 +336,7 @@ class GroupEntranceAnnouncementChangeEvent extends EventBase
   @override
   EventType get type => EventType.GroupEntranceAnnouncementChangeEvent;
 
+  @override
   Map<String, dynamic> toJson() {
     return {
       'type': type.toBriefString(),
@@ -339,6 +352,7 @@ class GroupMuteAllEvent extends EventBase with GroupStatusChangeEventMixin<bool>
   @override
   EventType get type => EventType.GroupMuteAllEvent;
 
+  @override
   Map<String, dynamic> toJson() {
     return {
       'type': type.toBriefString(),
@@ -355,6 +369,7 @@ class GroupAllowAnonymousChatEvent extends EventBase
   @override
   EventType get type => EventType.GroupAllowAnonymousChatEvent;
 
+  @override
   Map<String, dynamic> toJson() {
     return {
       'type': type.toBriefString(),
@@ -373,6 +388,7 @@ class GroupAllowConfessTalkEvent extends EventBase
 
   late bool isByBot;
 
+  @override
   Map<String, dynamic> toJson() {
     return {
       'type': type.toBriefString(),
@@ -389,6 +405,7 @@ class GroupAllowMemberInviteEvent extends EventBase
   @override
   EventType get type => EventType.GroupAllowMemberInviteEvent;
 
+  @override
   Map<String, dynamic> toJson() {
     return {
       'type': type.toBriefString(),
@@ -404,6 +421,7 @@ class MemberJoinEvent extends EventBase with JoinEventMixin {
   @override
   EventType get type => EventType.MemberJoinEvent;
 
+  @override
   Map<String, dynamic> toJson() {
     return {
       'type': type.toBriefString(),
@@ -417,6 +435,7 @@ class MemberLeaveEventKick extends EventBase with LeaveEventMixin {
   @override
   EventType get type => EventType.MemberLeaveEventKick;
 
+  @override
   Map<String, dynamic> toJson() {
     return {
       'type': type.toBriefString(),
@@ -430,6 +449,7 @@ class MemberLeaveEventQuit extends EventBase with LeaveEventMixin {
   @override
   EventType get type => EventType.MemberLeaveEventQuit;
 
+  @override
   Map<String, dynamic> toJson() {
     return {
       'type': type.toBriefString(),
@@ -443,6 +463,7 @@ class MemberCardChangeEvent extends EventBase
   @override
   EventType get type => EventType.MemberCardChangeEvent;
 
+  @override
   Map<String, dynamic> toJson() {
     return {
       'type': type.toBriefString(),
@@ -458,6 +479,7 @@ class MemberSpecialTitleChangeEvent extends EventBase
   @override
   EventType get type => EventType.MemberSpecialTitleChangeEvent;
 
+  @override
   Map<String, dynamic> toJson() {
     return {
       'type': type.toBriefString(),
@@ -473,6 +495,7 @@ class MemberPermissionChangeEvent extends EventBase
   @override
   EventType get type => EventType.MemberPermissionChangeEvent;
 
+  @override
   Map<String, dynamic> toJson() {
     return {
       'type': type.toBriefString(),
@@ -487,6 +510,7 @@ class MemberMuteEvent extends EventBase with MuteEventMixin {
   @override
   EventType get type => EventType.MemberMuteEvent;
 
+  @override
   Map<String, dynamic> toJson() {
     return {
       'type': type.toBriefString(),
@@ -501,6 +525,7 @@ class MemberUnmuteEvent extends EventBase with MuteEventMixin {
   @override
   EventType get type => EventType.MemberUnmuteEvent;
 
+  @override
   Map<String, dynamic> toJson() {
     return {
       'type': type.toBriefString(),
@@ -520,6 +545,7 @@ class MemberHonorChangeEvent extends EventBase {
 
   late String honor;
 
+  @override
   Map<String, dynamic> toJson() {
     return {
       'type': type.toBriefString(),
@@ -534,6 +560,7 @@ class NewFriendRequestEvent extends EventBase with RequestEventMixin {
   @override
   EventType get type => EventType.NewFriendRequestEvent;
 
+  @override
   Map<String, dynamic> toJson() {
     return {
       'type': type.toBriefString(),
@@ -550,6 +577,7 @@ class MemberJoinRequestEvent extends EventBase with RequestEventMixin {
   @override
   EventType get type => EventType.MemberJoinRequestEvent;
 
+  @override
   Map<String, dynamic> toJson() {
     return {
       'type': type.toBriefString(),
@@ -566,6 +594,7 @@ class BotInvitedJoinGroupRequestEvent extends EventBase with RequestEventMixin {
   @override
   EventType get type => EventType.BotInvitedJoinGroupRequestEvent;
 
+  @override
   Map<String, dynamic> toJson() {
     return {
       'type': type.toBriefString(),
@@ -582,6 +611,7 @@ class OtherClientOnlineEvent extends EventBase with OtherClientEventMixin {
   @override
   EventType get type => EventType.OtherClientOnlineEvent;
 
+  @override
   Map<String, dynamic> toJson() {
     return {
       'type': type.toBriefString(),
@@ -596,6 +626,7 @@ class OtherClientOfflineEvent extends EventBase with OtherClientEventMixin {
   @override
   EventType get type => EventType.OtherClientOfflineEvent;
 
+  @override
   Map<String, dynamic> toJson() {
     return {
       'type': type.toBriefString(),
